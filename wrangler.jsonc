@@ -1,0 +1,9 @@
+{
+  // Site 100% estatico: nao ha script de Worker, so os arquivos gerados pelo Astro.
+  // O Cloudflare serve `dist/` direto do edge e respeita o public/_headers.
+  "name": "opsprimer",
+  "compatibility_date": "2026-08-14",
+  "assets": {
+    "directory": "./dist"
+  }
+}
