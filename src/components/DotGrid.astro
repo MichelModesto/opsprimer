@@ -1,25 +1,45 @@
 ---
 // ELEMENTO ASSINATURA. Numeros medidos numa conta HubSpot real (14/08/2026):
 // 213 propriedades de contato de fabrica. Uma agencia pequena usa ~15.
-// Os 15 acesos sao deterministicos — nada de Math.random, que quebraria o build.
+// Os 15 acesos sao deterministicos — Math.random quebraria o build.
 const TOTAL = 213;
 const USED = 15;
 const step = Math.floor(TOTAL / USED);
 const lit = new Set(Array.from({ length: USED }, (_, i) => i * step + 3));
+// 600ms no total, escalonado ponto a ponto.
+const stagger = (600 / TOTAL).toFixed(2);
 ---
 <figure class="dotgrid">
-  <div class="dotgrid-key">
-    <span class="on">actually used</span>
-    <span>ships by default</span>
+  <div class="dotgrid-figure">
+    <div class="tally" aria-hidden="true">213</div>
+
+    <div class="dotgrid-grid" role="img"
+         aria-label={`${TOTAL} contact properties ship with an empty HubSpot account; a small agency uses about ${USED}.`}>
+      {Array.from({ length: TOTAL }, (_, i) => (
+        <i class={lit.has(i) ? 'on' : undefined} style={`--d:${(i * Number(stagger)).toFixed(0)}ms`} />
+      ))}
+    </div>
   </div>
-  <div class="dotgrid-grid" role="img"
-       aria-label={`${TOTAL} contact properties ship with an empty HubSpot account; a small agency uses about ${USED}.`}>
-    {Array.from({ length: TOTAL }, (_, i) => <i class={lit.has(i) ? 'on' : undefined} />)}
-  </div>
+
   <figcaption class="dotgrid-caption">
-    <b>213 contact properties</b> ship with an empty HubSpot account, before a
-    single contact exists. A small agency uses about fifteen. Every one of the
-    others sits in your import mapping, your filters and your form builder —
-    permanently. <b>I counted them.</b>
+    <b>Contact properties in an empty HubSpot account.</b> A small agency uses
+    about fifteen. The rest sit in every import, filter and form you ever build.
+    <b>I counted them.</b>
   </figcaption>
 </figure>
+
+<script>
+  // Conta 0 → 213 uma vez. O numero real ja esta no HTML, entao sem JS a
+  // pagina fica correta — isto so anima o que ja esta certo.
+  const el = document.querySelector('.tally');
+  if (el && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    const end = 213, dur = 900, t0 = performance.now();
+    const tick = (t) => {
+      const p = Math.min(1, (t - t0) / dur);
+      el.textContent = String(Math.round((1 - Math.pow(1 - p, 3)) * end));
+      if (p < 1) requestAnimationFrame(tick);
+    };
+    el.textContent = '0';
+    requestAnimationFrame(tick);
+  }
+</script>

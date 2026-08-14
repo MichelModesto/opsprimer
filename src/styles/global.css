@@ -6,10 +6,9 @@
 
 /* ---------- fontes auto-hospedadas ---------- */
 @font-face {
-  font-family: 'Newsreader';
-  src: url('/fonts/newsreader-500.woff2') format('woff2');
-  font-weight: 500; font-style: normal; font-display: swap;
-  size-adjust: 100%;
+  font-family: 'Bricolage';
+  src: url('/fonts/bricolage-600.woff2') format('woff2');
+  font-weight: 600; font-style: normal; font-display: swap;
 }
 @font-face {
   font-family: 'Public Sans';
@@ -42,7 +41,7 @@
   --signal: #C2185B;   /* SO limite / parede / cota gasta */
   --link:   #1F5FA8;
 
-  --display: 'Newsreader', Georgia, serif;
+  --display: 'Bricolage', -apple-system, 'Segoe UI', sans-serif;
   --body: 'Public Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
   --mono: 'Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
@@ -101,7 +100,7 @@ body {
 }
 
 /* ---------- tipografia ---------- */
-h1, h2, h3 { font-family: var(--display); font-weight: 500; letter-spacing: -0.006em; }
+h1, h2, h3 { font-family: var(--display); font-weight: 600; letter-spacing: -0.022em; }
 
 h1 {
   font-size: clamp(2.05rem, 1.6rem + 2.1vw, 2.9rem);
@@ -155,13 +154,13 @@ pre {
 pre code { background: none; padding: 0; font-size: inherit; }
 
 /* ---------- cabecalho ---------- */
-.site-header { border-bottom: 1px solid var(--rule); }
+.site-header { }
 .site-header > div {
   display: flex; align-items: center; gap: 1.6rem;
   padding-block: 1rem; flex-wrap: wrap;
 }
 .brand {
-  font-family: var(--display); font-size: 1.16rem; font-weight: 500;
+  font-family: var(--display); font-size: 1.12rem; font-weight: 600;
   color: var(--ink); text-decoration: none; margin-right: auto;
   letter-spacing: -0.01em;
 }
@@ -177,38 +176,61 @@ pre code { background: none; padding: 0; font-size: inherit; }
 main { padding-block: 3.2rem 5rem; }
 
 /* ============================================================
-   ELEMENTO ASSINATURA — a grade de 213 pontos.
-   213 propriedades de contato numa conta vazia; ~15 usadas.
+   ELEMENTO ASSINATURA — 213 pontos + o numero em escala gigante.
+   O contraste de escala e o que torna a home chamativa.
+   Um unico momento animado no site inteiro: pinta uma vez, sem loop.
    ============================================================ */
-.dotgrid { margin: 0 0 2.4rem; }
+.dotgrid { margin: 0 0 3rem; }
+
+.dotgrid-figure {
+  display: flex; align-items: flex-start; gap: clamp(1rem, 3vw, 2.2rem);
+  margin-bottom: 1.4rem;
+}
+
+.tally {
+  font-family: var(--display); font-weight: 600;
+  font-size: clamp(6rem, 14vw, 12rem);
+  line-height: 0.78;
+  letter-spacing: -0.05em;
+  font-variant-numeric: tabular-nums;
+  color: var(--ink);
+  flex: 0 0 auto;
+  margin-top: -0.06em;   /* alinha a altura optica ao topo da grade */
+}
+
 .dotgrid-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(9px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(8px, 1fr));
   gap: 5px;
-  max-width: 26rem;
-  margin-bottom: 1.1rem;
+  flex: 1 1 auto; min-width: 0;
+  padding-top: 0.5rem;
 }
 .dotgrid-grid i {
   display: block; aspect-ratio: 1; border-radius: 50%;
   background: var(--rule);
+  opacity: 0; transform: scale(0.4);
+  animation: dot-in 260ms cubic-bezier(.2,.8,.3,1) forwards;
+  animation-delay: var(--d, 0ms);
 }
 .dotgrid-grid i.on { background: var(--signal); }
+
+@keyframes dot-in { to { opacity: 1; transform: none; } }
+
+@media (prefers-reduced-motion: reduce) {
+  .dotgrid-grid i { animation: none; opacity: 1; transform: none; }
+}
+
 .dotgrid-caption {
-  font-size: 0.94rem; line-height: 1.5; color: var(--ink-2);
-  max-width: 27rem;
+  font-size: 0.92rem; line-height: 1.5; color: var(--ink-2);
+  max-width: 30rem;
 }
 .dotgrid-caption b { color: var(--ink); font-weight: 600; }
-.dotgrid-key {
-  font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.04em;
-  text-transform: uppercase; color: var(--ink-2);
-  display: flex; gap: 1.1rem; margin-bottom: 0.7rem; flex-wrap: wrap;
+
+@media (max-width: 34rem) {
+  .dotgrid-figure { flex-direction: column; gap: 0.9rem; }
+  .tally { font-size: clamp(5rem, 24vw, 8rem); }
+  .dotgrid-grid { width: 100%; padding-top: 0; }
 }
-.dotgrid-key span { display: inline-flex; align-items: center; gap: 0.4rem; }
-.dotgrid-key span::before {
-  content: ''; width: 8px; height: 8px; border-radius: 50%;
-  background: var(--rule);
-}
-.dotgrid-key span.on::before { background: var(--signal); }
 
 /* ---------- selo de procedencia (Evidence) ---------- */
 .evidence {
@@ -240,15 +262,14 @@ main { padding-block: 3.2rem 5rem; }
   display: flex; flex-wrap: wrap; gap: 0.35rem 0.9rem;
   font-family: var(--mono); font-size: 0.74rem; letter-spacing: 0.03em;
   text-transform: uppercase; color: var(--ink-2);
-  margin-bottom: 1rem; padding-bottom: 1rem;
-  border-bottom: 1px solid var(--rule);
+  margin-bottom: 2rem;
 }
 .article-meta time { font-variant-numeric: tabular-nums; }
 .verified { color: var(--ink); }
 
 /* ---------- indice colapsavel no topo ---------- */
 .toc {
-  border: 1px solid var(--rule); border-radius: 4px;
+  border-radius: 4px;
   margin: 0 0 2.4rem; background: var(--raised);
 }
 .toc summary {
@@ -274,8 +295,8 @@ table {
   font-variant-numeric: tabular-nums;
 }
 th, td {
-  text-align: left; padding: 0.58rem 0.85rem;
-  border-bottom: 1px solid var(--rule); vertical-align: top;
+  text-align: left; padding: 0.62rem 0.9rem 0.62rem 0;
+  vertical-align: top;
 }
 th {
   font-family: var(--mono); font-weight: 500;
@@ -284,19 +305,17 @@ th {
   border-bottom: 1px solid var(--ink-2);
 }
 td:first-child { font-weight: 600; }
-tbody tr:last-child td { border-bottom: 0; }
+
 td strong { font-family: var(--mono); font-weight: 500; color: var(--signal); }
 
 /* ---------- lista de artigos ---------- */
-.post-list { list-style: none; padding: 0; margin: 0; }
-.post-list > li { border-top: 1px solid var(--rule); }
-.post-list > li:first-child { border-top: 0; }
+.post-list { list-style: none; padding: 0; margin: 0; display: grid; gap: 1.4rem; }
 .post-link {
-  display: block; padding: 1.5rem 0; text-decoration: none; color: inherit;
+  display: block; padding: 1.15rem 0; text-decoration: none; color: inherit;
 }
 .post-link:hover .post-title { color: var(--link); }
 .post-title {
-  font-family: var(--display); font-weight: 500; font-size: 1.24rem;
+  font-family: var(--display); font-weight: 600; font-size: 1.28rem;
   line-height: 1.24; margin-bottom: 0.4rem; text-wrap: balance;
   letter-spacing: -0.005em;
 }
@@ -309,26 +328,25 @@ td strong { font-family: var(--mono); font-weight: 500; color: var(--signal); }
 .section-label {
   font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.09em;
   text-transform: uppercase; color: var(--ink-2);
-  padding-bottom: 0.6rem; border-bottom: 1px solid var(--ink-2);
-  margin: 3.4rem 0 0;
+  margin: 4rem 0 0.4rem;
 }
 
 /* ---------- caixa de autor ---------- */
 .author {
-  border-top: 1px solid var(--rule); padding-top: 1.4rem; margin-top: 3.4rem;
+  margin-top: 4rem;
 }
 .author-body { font-size: 0.92rem; line-height: 1.55; color: var(--ink-2); }
 .author-body b { color: var(--ink); display: block; font-weight: 600; margin-bottom: 0.1rem; }
 .author-body p { margin: 0; }
 
 /* ---------- read next ---------- */
-.next-up { margin-top: 2.4rem; padding-top: 1.3rem; border-top: 1px solid var(--rule); }
+.next-up { margin-top: 3rem; }
 .next-up .label {
   font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.08em;
   text-transform: uppercase; color: var(--ink-2); margin-bottom: 0.4rem;
 }
 .next-up a {
-  font-family: var(--display); font-size: 1.1rem; font-weight: 500;
+  font-family: var(--display); font-size: 1.14rem; font-weight: 600;
   text-decoration: none; line-height: 1.25; display: inline-block;
 }
 .next-up a:hover { text-decoration: underline; }
@@ -347,7 +365,7 @@ td strong { font-family: var(--mono); font-weight: 500; color: var(--signal); }
 .aff:hover { background-size: 100% 2px; }
 
 /* ---------- quiz ---------- */
-.quiz { border: 1px solid var(--rule); border-radius: 4px; margin: 2.4rem 0; }
+.quiz { background: var(--raised); border-radius: 5px; margin: 2.8rem 0; }
 .quiz-head { padding: 1rem 1.1rem 0.2rem; }
 .quiz-head h3 { margin: 0 0 0.3rem; font-size: 1.02rem; }
 .quiz-head p { font-size: 0.88rem; color: var(--ink-2); margin: 0 0 0.6rem; }
@@ -368,7 +386,7 @@ td strong { font-family: var(--mono); font-weight: 500; color: var(--signal); }
 .quiz-opts label:has(input:checked) { background: var(--ink); border-color: var(--ink); }
 .quiz-opts label:has(input:focus-visible) { outline: 2px solid var(--signal); outline-offset: 2px; }
 .quiz-result {
-  border-top: 1px solid var(--rule); padding: 1rem 1.1rem;
+  padding: 0.2rem 1.1rem 1.2rem;
   font-size: 0.94rem; line-height: 1.5;
 }
 .quiz-result .wall {
@@ -381,7 +399,7 @@ td strong { font-family: var(--mono); font-weight: 500; color: var(--signal); }
 
 /* ---------- rodape ---------- */
 .site-footer {
-  border-top: 1px solid var(--rule); padding-block: 2rem 2.6rem;
+  padding-block: 3rem 2.6rem;
   color: var(--ink-2); font-size: 0.85rem;
 }
 .site-footer nav { display: flex; gap: 1.2rem; flex-wrap: wrap; margin-bottom: 0.7rem; }

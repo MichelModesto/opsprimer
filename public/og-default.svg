@@ -6,8 +6,8 @@
     <circle cx="224" cy="80" r="5"/><circle cx="248" cy="80" r="5"/><circle cx="272" cy="80" r="5"/>
   </g>
   <circle cx="80" cy="80" r="5" fill="#C2185B"/>
-  <text x="80" y="330" font-family="Georgia,serif" font-size="72" fill="#141719">CRM advice from the</text>
-  <text x="80" y="410" font-family="Georgia,serif" font-size="72" fill="#141719">person who has to</text>
-  <text x="80" y="490" font-family="Georgia,serif" font-size="72" fill="#141719">make it work</text>
+  <text x="80" y="330" font-family="Helvetica,Arial,sans-serif" font-weight="700" font-size="76" letter-spacing="-2" fill="#141719">CRM advice from the</text>
+  <text x="80" y="410" font-family="Helvetica,Arial,sans-serif" font-weight="700" font-size="76" letter-spacing="-2" fill="#141719">person who has to</text>
+  <text x="80" y="490" font-family="Helvetica,Arial,sans-serif" font-weight="700" font-size="76" letter-spacing="-2" fill="#141719">make it work</text>
   <text x="80" y="570" font-family="monospace" font-size="26" letter-spacing="3" fill="#565D63">OPSPRIMER.COM</text>
 </svg>
