@@ -26,7 +26,9 @@ const path = Astro.url.pathname;
         Publica por natureza — nao e segredo. */}
     <meta name="impact-site-verification" value="0963f78d-2a58-41d7-b254-7ced3a9457a4" />
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
-    <style>
+    {/* is:global e obrigatorio: sem ele o Astro escopa o CSS a este componente
+        e o conteudo vindo do <slot /> (paginas e MDX) fica sem estilo. */}
+    <style is:global>
       /* ---- tokens ---- */
       :root {
         --ink:        #16181d;
