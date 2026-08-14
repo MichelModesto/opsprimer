@@ -1,0 +1,24 @@
+# Segredos — nunca versionar
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.p12
+credentials.json
+secrets.*
+
+# Dependências e build
+node_modules/
+dist/
+.astro/
+.vercel/
+.wrangler/
+
+# Sistema
+.DS_Store
+Thumbs.db
+
+# Rascunhos e material bruto — pode conter dado de cliente
+/rascunhos/
+/screenshots-brutos/

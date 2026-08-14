@@ -1,0 +1,27 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { getCollection } from 'astro:content';
+
+const articles = (await getCollection('articles', ({ data }) => !data.draft))
+  .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+---
+<BaseLayout
+  title="OpsPrimer — marketing automation, explained by someone who runs it"
+  description="Practical guides on marketing automation and operations for agencies and consultants."
+>
+  <h1>Marketing automation, without the vendor pitch</h1>
+  <p>
+    Practical write-ups from actually running these tools on real client work —
+    including what went wrong.
+  </p>
+
+  <h2>Latest</h2>
+  <ul>
+    {articles.map((a) => (
+      <li>
+        <a href={`/articles/${a.id}/`}>{a.data.title}</a>
+        <div style="color:var(--muted);font-size:.92rem">{a.data.description}</div>
+      </li>
+    ))}
+  </ul>
+</BaseLayout>

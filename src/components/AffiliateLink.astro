@@ -1,0 +1,9 @@
+---
+// Unico jeito de linkar afiliado neste projeto.
+// Garante rel="sponsored" (exigido pelo Google) e noopener (anti-tabnabbing).
+interface Props {
+  href: string;
+}
+const { href } = Astro.props;
+---
+<a href={href} rel="sponsored nofollow noopener" target="_blank"><slot /></a>

@@ -1,0 +1,16 @@
+#!/bin/sh
+# Bloqueia commit com segredo. Falha fechado de proposito.
+if ! command -v gitleaks >/dev/null 2>&1; then
+  echo ""
+  echo "❌ gitleaks nao instalado — commit bloqueado por seguranca."
+  echo "   Instale com:  brew install gitleaks"
+  echo ""
+  exit 1
+fi
+gitleaks protect --staged --redact --verbose || {
+  echo ""
+  echo "❌ SEGREDO DETECTADO nos arquivos staged. Commit bloqueado."
+  echo "   Remova o segredo. NAO use --no-verify."
+  echo ""
+  exit 1
+}
