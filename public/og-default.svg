@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
+  <rect width="1200" height="630" fill="#F7F8F7"/>
+  <g fill="#DFE3E2">
+    <circle cx="80" cy="80" r="5"/><circle cx="104" cy="80" r="5"/><circle cx="128" cy="80" r="5"/>
+    <circle cx="152" cy="80" r="5"/><circle cx="176" cy="80" r="5"/><circle cx="200" cy="80" r="5"/>
+    <circle cx="224" cy="80" r="5"/><circle cx="248" cy="80" r="5"/><circle cx="272" cy="80" r="5"/>
+  </g>
+  <circle cx="80" cy="80" r="5" fill="#C2185B"/>
+  <text x="80" y="330" font-family="Georgia,serif" font-size="72" fill="#141719">CRM advice from the</text>
+  <text x="80" y="410" font-family="Georgia,serif" font-size="72" fill="#141719">person who has to</text>
+  <text x="80" y="490" font-family="Georgia,serif" font-size="72" fill="#141719">make it work</text>
+  <text x="80" y="570" font-family="monospace" font-size="26" letter-spacing="3" fill="#565D63">OPSPRIMER.COM</text>
+</svg>

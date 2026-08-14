@@ -1,0 +1,8 @@
+---
+// Marca cada afirmacao forte pela procedencia. O texto dos artigos ja faz essa
+// distincao ("I have not run ActiveCampaign on real client work") — isto torna visual.
+interface Props { type?: 'tested' | 'docs'; }
+const { type = 'tested' } = Astro.props;
+const label = type === 'tested' ? 'Tested on a live account' : 'From official docs';
+---
+<span class={`evidence ${type}`}>{label}</span>

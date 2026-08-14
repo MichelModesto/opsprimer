@@ -1,0 +1,92 @@
+---
+// Unica peca com JS do site. Progressive enhancement de verdade:
+// sem JS, a tabela de fallback responde a mesma pergunta.
+// Zero coleta de dados, zero e-mail.
+---
+<section class="quiz" id="wall-quiz">
+  <div class="quiz-head">
+    <h3>Which free-tier wall hits you first?</h3>
+    <p>Four questions. Nothing is collected or sent anywhere.</p>
+  </div>
+
+  <form class="quiz-body" id="wq-form">
+    <fieldset>
+      <legend>How many people need a login?</legend>
+      <div class="quiz-opts">
+        <label><input type="radio" name="seats" value="1" checked /><span>Just me</span></label>
+        <label><input type="radio" name="seats" value="2" /><span>2</span></label>
+        <label><input type="radio" name="seats" value="3" /><span>3 or more</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>How many separate pipelines do you need?</legend>
+      <div class="quiz-opts">
+        <label><input type="radio" name="pipes" value="1" checked /><span>One</span></label>
+        <label><input type="radio" name="pipes" value="2" /><span>Two or more</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Marketing emails per month (sends, not contacts)</legend>
+      <div class="quiz-opts">
+        <label><input type="radio" name="sends" value="0" checked /><span>None yet</span></label>
+        <label><input type="radio" name="sends" value="1" /><span>Under 2,000</span></label>
+        <label><input type="radio" name="sends" value="2" /><span>Over 2,000</span></label>
+      </div>
+    </fieldset>
+
+    <fieldset>
+      <legend>Do clients see your forms and landing pages?</legend>
+      <div class="quiz-opts">
+        <label><input type="radio" name="brand" value="0" checked /><span>No, internal only</span></label>
+        <label><input type="radio" name="brand" value="1" /><span>Yes</span></label>
+      </div>
+    </fieldset>
+  </form>
+
+  <output class="quiz-result" id="wq-out" aria-live="polite" for="wq-form"></output>
+
+  <div class="quiz-fallback">
+    <table>
+      <thead><tr><th>If this is true</th><th>The wall you hit</th></tr></thead>
+      <tbody>
+        <tr><td>Clients see your forms or emails</td><td><strong>Branding</strong> — not removable on free</td></tr>
+        <tr><td>You need a 2nd pipeline</td><td><strong>1</strong> deal pipeline</td></tr>
+        <tr><td>A 3rd person needs a login</td><td><strong>2</strong> users</td></tr>
+        <tr><td>You send over 2,000 emails/month</td><td><strong>2,000</strong> sends, counted per send</td></tr>
+        <tr><td>None of the above</td><td><strong>10</strong> custom properties — 4 already spent</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<script>
+  document.documentElement.classList.add('js');
+  const form = document.getElementById('wq-form');
+  const out = document.getElementById('wq-out');
+
+  const WALLS = [
+    { when: (v) => v.brand === '1',  name: 'HubSpot branding',
+      text: 'Every form, landing page and marketing email carries HubSpot branding on the free plan, and there is no setting to remove it. Anything a client sees decides this for you before any other limit does.' },
+    { when: (v) => v.pipes === '2',  name: 'One deal pipeline',
+      text: 'The free plan gives you one. Every client, every prospect and every renewal shares a single board with one set of stages. Starter takes it to two — not "as many as you need".' },
+    { when: (v) => v.seats === '3',  name: 'Two users',
+      text: 'Two is you plus one. There is no half-step: a third person means a paid seat.' },
+    { when: (v) => v.sends === '2',  name: '2,000 email sends per month',
+      text: 'Counted per send, not per contact. A campaign to 500 contacts with three follow-ups is the entire month, in one sequence.' },
+    { when: () => true,              name: 'Ten custom properties',
+      text: 'The quietest one. Ten in total, and the AI onboarding spends four before you touch anything — 40% gone, shown nowhere in the flow.' },
+  ];
+
+  function render() {
+    const v = Object.fromEntries(new FormData(form));
+    const hit = WALLS.find((w) => w.when(v));
+    out.innerHTML =
+      '<span class="wall">First wall: ' + hit.name + '</span>' + hit.text +
+      ' <a href="#which-one-stops-you-first">Read the full list of limits</a>.';
+  }
+
+  form.addEventListener('change', render);
+  render();
+</script>

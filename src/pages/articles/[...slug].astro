@@ -15,35 +15,76 @@ export async function getStaticPaths() {
 }
 
 const { article, next } = Astro.props;
-const { Content } = await render(article);
+const { Content, headings } = await render(article);
 
-// Tempo de leitura estimado a partir do corpo do MDX.
 const words = article.body?.split(/\s+/).length ?? 0;
 const minutes = Math.max(1, Math.round(words / 220));
+const toc = headings.filter((h) => h.depth === 2);
 
+const iso = (d: Date) => d.toISOString();
 const fmt = (d: Date) =>
   d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+
+// Data em que os numeros foram conferidos na fonte oficial.
+const verified = article.data.updatedDate ?? article.data.pubDate;
+const url = new URL(`/articles/${article.id}/`, Astro.site).toString();
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@graph': [
+    {
+      '@type': 'Article',
+      headline: article.data.title,
+      description: article.data.description,
+      datePublished: iso(article.data.pubDate),
+      dateModified: iso(verified),
+      mainEntityOfPage: url,
+      author: {
+        '@type': 'Person',
+        name: 'Michel Modesto',
+        jobTitle: 'Fullstack developer',
+        url: 'https://opsprimer.com/about/',
+      },
+      publisher: { '@type': 'Organization', name: 'OpsPrimer', url: 'https://opsprimer.com' },
+    },
+    {
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        { '@type': 'ListItem', position: 1, name: 'Home', item: 'https://opsprimer.com/' },
+        { '@type': 'ListItem', position: 2, name: 'Articles', item: 'https://opsprimer.com/articles/' },
+        { '@type': 'ListItem', position: 3, name: article.data.title, item: url },
+      ],
+    },
+  ],
+};
 ---
-<BaseLayout title={article.data.title} description={article.data.description}>
+<BaseLayout title={article.data.title} description={article.data.description} jsonLd={jsonLd}>
   <article>
     <h1>{article.data.title}</h1>
     <p class="lede">{article.data.description}</p>
 
     <div class="article-meta">
-      <span>By Michel Modesto</span>
-      <time datetime={article.data.pubDate.toISOString()}>{fmt(article.data.pubDate)}</time>
-      {article.data.updatedDate && (
-        <span>Updated {fmt(article.data.updatedDate)}</span>
-      )}
+      <span>Michel Modesto</span>
+      <time datetime={iso(article.data.pubDate)}>{fmt(article.data.pubDate)}</time>
       <span>{minutes} min read</span>
+      <span class="verified">Limits verified {fmt(verified)}</span>
     </div>
+
+    {toc.length > 2 && (
+      <details class="toc">
+        <summary>Contents</summary>
+        <ol>
+          {toc.map((h) => <li><a href={`#${h.slug}`}>{h.text}</a></li>)}
+        </ol>
+      </details>
+    )}
 
     <Disclosure />
     <Content />
     <AuthorBox />
 
     {next && (
-      <nav class="next-up">
+      <nav class="next-up" aria-label="Next article">
         <div class="label">Read next</div>
         <a href={`/articles/${next.id}/`}>{next.data.title}</a>
       </nav>

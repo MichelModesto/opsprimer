@@ -1,17 +1,25 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Person',
+  name: 'Michel Modesto',
+  jobTitle: 'Fullstack developer',
+  url: 'https://opsprimer.com/about/',
+  knowsAbout: ['CRM', 'Marketing automation', 'API integration', 'Business operations'],
+};
 ---
-<BaseLayout title="About — OpsPrimer" description="Who writes OpsPrimer and why.">
+<BaseLayout
+  title="About — OpsPrimer"
+  description="Michel Modesto, fullstack developer. Why a developer writes about CRMs, and the rules this site follows."
+  jsonLd={jsonLd}
+>
   <h1>About</h1>
-
-  {/* Nome real e experiencia sao OBRIGATORIOS aqui: requisito de E-E-A-T e de
-      aprovacao nas redes de afiliado. NUNCA endereco residencial, telefone
-      pessoal ou CPF. Ver arquivo 11 do dossie. */}
-
-  <p>
-    I'm <strong>Michel Modesto</strong>, a fullstack developer. For the past ten
-    years I've built APIs, integrations and automation for small companies —
-    and, often enough, the whole system around them.
+  <p class="lede">
+    I'm Michel Modesto, a fullstack developer. For ten years I've built APIs,
+    integrations and automation for small companies — and, often enough, the
+    whole system around them.
   </p>
 
   <p>
@@ -31,55 +39,27 @@ import BaseLayout from '../layouts/BaseLayout.astro';
     problem — and the things that break are boring, specific, and almost never
     mentioned on the pricing page. Field mapping that silently truncates. Rate
     limits nobody documented. A "sync" that's really a fifteen-minute poll. An
-    export that loses the one custom property your whole reporting depended on.
+    export that loses the one custom property your reporting depended on.
   </p>
 
+  <h2>The rules this site follows</h2>
+  <table>
+    <tbody>
+      <tr><td>Tools</td><td>I only cover what I've used. Where a claim comes from documentation instead of use, the page says so.</td></tr>
+      <tr><td>Weaknesses</td><td>Every tool gets a stated weakness — including the ones that pay me.</td></tr>
+      <tr><td>Numbers</td><td>Limits and prices come from official sources, dated on the page. When they change, the page changes.</td></tr>
+      <tr><td>Client data</td><td>Never in a screenshot. Anything shown from a real account is a scratch workspace with fake records.</td></tr>
+      <tr><td>Money</td><td>Affiliate links, disclosed at the top of every article that has one. No sponsored posts, no paid placement.</td></tr>
+    </tbody>
+  </table>
+
+  <h2>Why this exists</h2>
   <p>
-    So that's the angle here: CRMs, the automation bolted onto them, and the
-    plumbing underneath. Not which platform has the nicest feature grid, but
-    what these tools are like to live with once real client data is moving
-    through them — and what it costs to leave when you outgrow one.
-  </p>
-
-  <h2>How I write</h2>
-  <ul>
-    <li>I only cover tools I've actually used on real work.</li>
-    <li>Every tool gets a stated weakness — including the ones that pay me.</li>
-    <li>Where I haven't tested something myself, I say so instead of implying I have.</li>
-    <li>
-      No screenshots of client data, ever. Anything you see from a real account
-      is a scratch workspace with fake records.
-    </li>
-  </ul>
-
-  <h2>Why this site exists</h2>
-  <p>
-    Search results for this topic are mostly written by the companies selling
-    the software. That isn't a conspiracy — it's just that a vendor can never
-    publish the sentence "don't buy ours, buy theirs." I can, and I do.
-  </p>
-
-  {/* ⚠️ OPCIONAL — descomente se quiser mostrar trabalho.
-      Duas coisas antes: (1) confirme que o cliente aceita ser citado
-      publicamente; (2) um dominio .vercel.app le como demo, nao como producao —
-      considere citar o projeto sem link, ou so depois de ter dominio proprio.
-
-  <h2>Selected work</h2>
-  <ul>
-    <li><a href="https://r4mi.com.br" rel="noopener" target="_blank">r4mi.com.br</a> — API e aplicativo</li>
-    <li>Miniparke — sistema completo, front e back</li>
-  </ul>
-  */}
-
-  <h2>How this site makes money</h2>
-  <p>
-    Some links are affiliate links — the
-    <a href="/affiliate-disclosure/">full disclosure is here</a>. It never
-    changes what I recommend, and it never removes a weakness from an article.
+    Search results for this topic are mostly written by the companies selling the
+    software. That isn't a conspiracy — a vendor simply can never publish the
+    sentence "don't buy ours, buy theirs." I can, and I do.
   </p>
 
   <h2>Contact</h2>
-  <p>
-    <a href="mailto:michelthedev@gmail.com">michelthedev@gmail.com</a>
-  </p>
+  <p><a href="mailto:michelthedev@gmail.com">michelthedev@gmail.com</a></p>
 </BaseLayout>

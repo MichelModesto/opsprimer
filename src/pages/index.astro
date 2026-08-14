@@ -1,32 +1,54 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
+import DotGrid from '../components/DotGrid.astro';
 import { getCollection } from 'astro:content';
 
 const articles = (await getCollection('articles', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const fmt = (d) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+const mins = (a) => Math.max(1, Math.round((a.body?.split(/\s+/).length ?? 0) / 220));
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebSite',
+  name: 'OpsPrimer',
+  url: 'https://opsprimer.com',
+  description: 'Practical guides on CRMs, automation and operations for marketing agencies.',
+  author: {
+    '@type': 'Person',
+    name: 'Michel Modesto',
+    jobTitle: 'Fullstack developer',
+    url: 'https://opsprimer.com/about/',
+  },
+};
 ---
 <BaseLayout
-  title="OpsPrimer — CRM and agency operations, from someone who wires them up"
-  description="Practical guides on CRMs, automation and operations for marketing agencies and consultants — written from real accounts, not feature grids."
+  title="OpsPrimer — CRM and agency operations, measured not reviewed"
+  description="Practical guides on CRMs, automation and operations for marketing agencies and consultants — written from accounts I set up and use, with the limits counted."
+  jsonLd={jsonLd}
 >
-  <h1>CRM advice from the person who has to make it work</h1>
+  <DotGrid />
 
+  <h1>CRM advice from the person who has to make it work</h1>
   <p class="lede">
     Most writing about these tools comes from people who evaluate them. I'm
-    usually the one wiring them into billing systems and finding out what breaks
-    six months in. Everything here is written from an account I set up and use.
+    usually the one wiring them into a billing system and finding out what breaks
+    six months in. Every article here starts from an account I set up myself —
+    and where I haven't tested something, I say so.
   </p>
 
-  <h2>Articles</h2>
+  <h2 class="section-label" id="articles">Articles</h2>
   <ul class="post-list">
     {articles.map((a) => (
       <li>
         <a class="post-link" href={`/articles/${a.id}/`}>
           <div class="post-title">{a.data.title}</div>
           <div class="post-desc">{a.data.description}</div>
-          <div class="post-date">{fmt(a.data.pubDate)}</div>
+          <div class="post-meta">
+            <span>{fmt(a.data.pubDate)}</span>
+            <span>{mins(a)} min</span>
+          </div>
         </a>
       </li>
     ))}
