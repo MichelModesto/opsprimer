@@ -1,0 +1,140 @@
+---
+title: "HubSpot workflows: the tier you actually need, and how they differ from sequences"
+description: "Workflows are Professional and above. So are sequences. Neither exists on free or Starter — which changes what 'start free and upgrade later' actually costs."
+pubDate: 2026-08-14
+draft: false
+tools: ["hubspot", "activecampaign"]
+group: limits
+hero: { figure: "0", label: "workflows on free or Starter" }
+---
+
+import ToolCard from '../../components/ToolCard.astro';
+import FitFinder from '../../components/FitFinder.astro';
+
+{/*
+  ARTIGO 8 — alvo: "hubspot workflows" (sub-intencoes reais no autocomplete:
+  vs sequences, pricing, examples, automation).
+
+  VERIFICADO em knowledge.hubspot.com/workflows/create-workflows (14/08/2026):
+  workflows = Professional e Enterprise, em todos os Hubs. Starter nao aparece.
+  Sequences = Sales Hub Pro/Enterprise ou Service Hub Pro/Enterprise, com
+  caixa de entrada conectada.
+*/}
+
+Two things get confused constantly in HubSpot, and the confusion is expensive because
+it's usually resolved after someone has already paid.
+
+The first is what a workflow is. The second is that people assume workflows arrive
+somewhere between free and expensive. They don't.
+
+## What a workflow actually is
+
+A workflow is an **enrollment trigger plus a set of actions**. Something becomes true
+about a record — a form is submitted, a deal reaches a stage, a property changes — and
+HubSpot runs a sequence of steps against that record without anyone clicking.
+
+That's the whole idea, and it's the correct mental model: not "automated email", but
+"when this becomes true, do these things". The email is one possible action among
+tasks, property updates, notifications and branching logic.
+
+## The tier, stated plainly
+
+From HubSpot's own documentation, workflows are available in **Professional and
+Enterprise** — across Marketing Hub, Sales Hub, Service Hub, Data Hub, Smart CRM and
+Revenue Hub.
+
+Starter is not on that list. Neither is free.
+
+| Tier | Workflows |
+|---|---|
+| Free | **No** |
+| Starter | **No** |
+| Professional | Yes |
+| Enterprise | Yes |
+
+This is the single most important thing to know before planning around them, because
+the widely repeated advice — "start on HubSpot free and upgrade when you need
+automation" — implies a small step. The step is from $0 or $7 a seat to Professional.
+
+## Workflows vs sequences
+
+The other confusion, and the answer is not "one is newer".
+
+**Sequences** are for one-to-one sales outreach. You enroll a contact **manually**,
+they receive a series of sales emails from your own inbox, and the sequence **stops
+when they reply**. It's a follow-up cadence for a human conversation.
+
+**Workflows** are for scale. Records enroll **automatically** when a trigger fires,
+the emails are marketing emails rather than personal ones, and the flow continues
+until a goal is met rather than stopping on a reply.
+
+| | Sequences | Workflows |
+|---|---|---|
+| Enrollment | Manual, one at a time | Automatic, by trigger |
+| Sends from | Your connected inbox | Marketing email system |
+| Stops when | They reply | A goal is met |
+| Built for | 1:1 sales follow-up | Repeatable processes at scale |
+
+**And the trap:** sequences require **Sales Hub Professional or Enterprise** — or
+Service Hub Professional or Enterprise — with a connected inbox. So the answer to
+"which one can I use on a cheaper plan" is neither.
+
+## What agencies actually build with them
+
+If you do get to Professional, these are the ones that repay the cost first. They're
+worth listing because they're also the test of whether you need the tier at all — if
+none of these apply, you probably don't.
+
+**Proposal follow-up.** Deal enters *Proposal sent* → task in three days → task in
+ten → if still open at twenty-one, move to a review stage. This one alone recovers
+deals that die from silence rather than rejection.
+
+**Client onboarding checklist.** Deal marked Won → create the standard tasks, notify
+whoever delivers, set a kickoff date. Removes the step where someone forgets step four.
+
+**Data hygiene.** Property changes → normalise it. Phone formats, country names,
+lifecycle stages that drift. Boring, and the reason reporting stays trustworthy.
+
+**Stale deal cleanup.** No activity in 30 days → flag it. Without this, pipeline value
+inflates with deals that died months ago, and every forecast built on it is fiction.
+
+Notice that only one of the four is marketing email. Most of what makes automation
+worth paying for is internal.
+
+<FitFinder heading="Not sure whether you're at that point?" />
+
+## If you're on free or Starter
+
+You have three honest options, and buying Professional purely for automation is rarely
+the best of them.
+
+**Do it manually and keep a checklist.** Unglamorous, and correct for a long time. Most
+of the value in the four examples above is the *consistency*, not the automation. A
+written checklist gets you most of it at zero cost.
+
+**Use a tool built automation-first.** If sequences are genuinely the core of your
+work, you're not looking for a bigger HubSpot plan — you're looking for a different
+shape of product.
+
+**Wire it externally.** The trigger data is available through the API on lower tiers.
+If you can build, this is often cheaper than the tier jump — with the caveat that you
+now own an integration, and integrations fail quietly.
+
+<ToolCard id="activecampaign" />
+
+<ToolCard id="hubspot" />
+
+## The question to answer before upgrading
+
+Not "would workflows be useful" — they always would. The question is: **what is
+currently going wrong because you don't have them, and what does that cost per month?**
+
+If the answer is a proposal that slipped once, the checklist is cheaper. If the answer
+is that you lose track of every deal past the first follow-up and can't say how many,
+that's a recurring cost and the tier is probably worth it.
+
+Price the problem, not the feature.
+
+Related: [what the free tiers actually automate](/articles/marketing-automation-for-agencies/)
+· [every hard limit on the free plan](/articles/hubspot-free-plan-limits/)
+· [what breaks when you wire it yourself](/articles/crm-integration-what-breaks/)
