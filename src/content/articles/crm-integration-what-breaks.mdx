@@ -1,0 +1,130 @@
+---
+title: "CRM integration: the six things that break, and what they look like"
+description: "Integrations rarely fail loudly. They truncate a field, poll instead of sync, or fire twice — and the damage is found weeks later. Here's what to check before you trust one."
+pubDate: 2026-08-14
+draft: false
+---
+
+{/*
+  ARTIGO 7 — alvo: "crm integration" (autocomplete denso: tools, api, services,
+  with outlook, with quickbooks).
+
+  Este e o artigo que so o Michel pode escrever: 10 anos ligando sistema em
+  empresa pequena. Sem produto especifico, sem afiliado — e conteudo de
+  autoridade que sustenta os outros seis. Nao force merchant aqui.
+*/}
+
+Every CRM sells integration as a checkbox. Connected or not connected.
+
+In practice an integration is a running process with failure modes, and almost none of
+them announce themselves. The connector stays green. The data quietly stops being
+true.
+
+I've spent ten years wiring these together for small companies. These are the six
+failures I've actually had to find, in rough order of how often they show up.
+
+## 1. Silent field truncation
+
+The most common, and the hardest to notice.
+
+Your CRM has a field with a length limit. The system on the other side doesn't, or has
+a different one. A value comes across, gets cut to fit, and the record saves
+successfully. No error, no warning — the integration reports success, because from its
+point of view it succeeded.
+
+Where it bites: notes, addresses, anything free-text, and phone numbers with country
+codes. Brazilian mobile numbers with `+55` and a nine-digit local part are a reliable
+way to find this.
+
+**How to check:** import twenty records, then pick the three longest values and compare
+them character by character against the source. Not a spot check of any three — the
+three longest.
+
+## 2. "Sync" that is really a poll
+
+Vendors use "sync" to mean two very different things.
+
+**Real sync** is event-driven: something changes, a webhook fires, the other side
+updates within seconds. **A poll** is a scheduled job that asks "anything new?" every
+five, fifteen or sixty minutes.
+
+Both are legitimate. They behave completely differently under pressure, and only one of
+them is safe for anything a customer sees. If your form confirmation depends on a
+record that arrives on a fifteen-minute poll, you will eventually send a confirmation
+before the record exists.
+
+**How to check:** change a record on one side and time how long the other side takes.
+Do it three times. If the delay is consistent and round, it's a poll, and the number
+you measured is your real latency.
+
+## 3. Webhooks that fire twice
+
+Webhook delivery is at-least-once, not exactly-once. Networks retry. That means every
+handler you build has to tolerate receiving the same event twice.
+
+If yours doesn't, you get duplicate deals, doubled counters, two emails to the same
+person. It works perfectly for weeks and then breaks on the day a retry happens.
+
+**How to check:** send the same event twice on purpose and see whether the result
+differs from sending it once. If it does, the integration is not safe yet — you need
+idempotency, which usually means storing the event ID and ignoring repeats.
+
+## 4. Rate limits nobody mentioned
+
+Every API has them. Almost no integration guide mentions them, because in a demo with
+fifty records you never get near one.
+
+You find them on the day of the bulk import, or the day a client's list arrives, and
+what you get is partial data: some records through, some rejected, no obvious pattern.
+The worst version is a connector that retries silently and gives up quietly.
+
+**How to check:** find the documented rate limit before you build, and test with more
+records than you expect to need. Ten times more, if the import is one-off.
+
+## 5. Custom properties lost on export
+
+The most expensive one when it happens, and the reason to test it before you need it.
+
+Standard fields export cleanly everywhere. Custom fields — the ones carrying the
+information specific to how you work — are where exports differ. Some tools include
+them. Some include the internal name rather than the label. Some omit them entirely
+unless you ask.
+
+This matters most at the moment you can least afford it: when you're leaving.
+
+**How to check:** on day one, before there's real data, export everything and open the
+file. Confirm your custom fields are in it and readable. If they're not, you know now
+instead of during a migration.
+
+## 6. Timezones that were never reconciled
+
+Small, constant, and it erodes trust in the data rather than breaking it.
+
+Two systems, two timezone settings, and nobody checked they agree. Reports drift by a
+day at month boundaries. Scheduled sends go out at the wrong hour. Task due dates land
+before the task exists.
+
+I found a version of this in a fresh CRM account within the first hour: the number
+format was set to Brazil, the timezone to US Eastern. It took the country from the
+interface language and the timezone from the account default, and never reconciled
+them.
+
+**How to check:** set both systems to the same timezone explicitly, on day one. Not
+"local", not "auto" — the same named zone, typed on both sides.
+
+## The pattern underneath all six
+
+None of these are exotic. What they share is that **the integration keeps reporting
+success while producing wrong results.**
+
+That's the thing to design around. A connector that fails loudly is a small problem —
+you see it and fix it. A connector that succeeds incorrectly is a large one, because
+you find it weeks later, in a client conversation, when someone asks why the number is
+wrong.
+
+So the check that matters isn't "is it connected". It's: **when this goes wrong, how
+will I know?** If the answer is "a client will tell me", the integration isn't
+finished yet.
+
+Related: [what a CRM's setup reveals before you commit](/articles/crm-for-marketing-agencies/)
+· [what the free tiers actually automate](/articles/marketing-automation-for-agencies/)
