@@ -4,14 +4,27 @@ import { getCollection } from 'astro:content';
 
 const articles = (await getCollection('articles', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
+
+const fmt = (d) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 ---
-<BaseLayout title="Articles — OpsPrimer" description="All articles on OpsPrimer.">
+<BaseLayout
+  title="Articles — OpsPrimer"
+  description="Every article on OpsPrimer: CRMs, automation and operations for marketing agencies."
+>
   <h1>Articles</h1>
-  <ul>
+  <p class="lede">
+    Written from tools I've set up and run myself. Where I haven't tested
+    something, I say so.
+  </p>
+
+  <ul class="post-list">
     {articles.map((a) => (
       <li>
-        <a href={`/articles/${a.id}/`}>{a.data.title}</a>
-        <div style="color:var(--muted);font-size:.92rem">{a.data.description}</div>
+        <a class="post-link" href={`/articles/${a.id}/`}>
+          <div class="post-title">{a.data.title}</div>
+          <div class="post-desc">{a.data.description}</div>
+          <div class="post-date">{fmt(a.data.pubDate)}</div>
+        </a>
       </li>
     ))}
   </ul>

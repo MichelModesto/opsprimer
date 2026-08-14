@@ -5,6 +5,7 @@ interface Props {
 }
 const { title, description } = Astro.props;
 const canonical = new URL(Astro.url.pathname, Astro.site);
+const path = Astro.url.pathname;
 ---
 <!doctype html>
 <html lang="en">
@@ -18,58 +19,253 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="OpsPrimer" />
+    <meta name="twitter:card" content="summary" />
     <link rel="sitemap" href="/sitemap-index.xml" />
     {/* Verificacao de propriedade da rede de afiliados Impact.
         Publica por natureza — nao e segredo. */}
     <meta name="impact-site-verification" value="0963f78d-2a58-41d7-b254-7ced3a9457a4" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <style>
-      :root { --fg:#1a1a1a; --muted:#666; --bg:#fff; --accent:#0b5fff; --line:#e5e5e5; }
+      /* ---- tokens ---- */
+      :root {
+        --ink:        #16181d;
+        --ink-soft:   #4a4f5a;
+        --ink-faint:  #767c88;
+        --bg:         #fdfdfc;
+        --bg-raised:  #f5f5f3;
+        --line:       #e3e3df;
+        --line-soft:  #eeeeea;
+        --accent:     #1b4dd6;
+        --accent-bg:  #eef2ff;
+        --measure:    38rem;
+      }
       @media (prefers-color-scheme: dark) {
-        :root { --fg:#e8e8e8; --muted:#9a9a9a; --bg:#141414; --accent:#7aa2ff; --line:#2c2c2c; }
+        :root {
+          --ink:       #e6e7e9;
+          --ink-soft:  #a8adb8;
+          --ink-faint: #767c88;
+          --bg:        #121316;
+          --bg-raised: #1b1d21;
+          --line:      #2c2f35;
+          --line-soft: #24262b;
+          --accent:    #8fabff;
+          --accent-bg: #1a2340;
+        }
       }
-      * { box-sizing: border-box; }
+
+      *, *::before, *::after { box-sizing: border-box; }
+
+      html { -webkit-text-size-adjust: 100%; }
+
       body {
-        margin:0; background:var(--bg); color:var(--fg);
-        font:17px/1.65 -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, sans-serif;
+        margin: 0;
+        background: var(--bg);
+        color: var(--ink);
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Inter, Roboto, sans-serif;
+        font-size: clamp(1.02rem, 0.98rem + 0.2vw, 1.12rem);
+        line-height: 1.68;
+        -webkit-font-smoothing: antialiased;
       }
-      .wrap { max-width:44rem; margin:0 auto; padding:0 1.25rem; }
-      header { border-bottom:1px solid var(--line); padding:1.25rem 0; }
-      header nav { display:flex; gap:1.25rem; align-items:baseline; flex-wrap:wrap; }
-      header .brand { font-weight:700; text-decoration:none; color:var(--fg); }
-      a { color:var(--accent); }
-      main { padding:2.5rem 0 4rem; }
-      h1 { font-size:2rem; line-height:1.2; margin:0 0 .5rem; }
-      h2 { margin-top:2.5rem; }
-      footer { border-top:1px solid var(--line); padding:2rem 0; color:var(--muted); font-size:.9rem; }
-      footer nav { display:flex; gap:1rem; flex-wrap:wrap; margin-bottom:.75rem; }
+
+      .wrap { max-width: var(--measure); margin-inline: auto; padding-inline: 1.4rem; }
+
+      /* ---- header ---- */
+      .site-header { border-bottom: 1px solid var(--line); }
+      .site-header .wrap {
+        display: flex; align-items: baseline; gap: 1.5rem;
+        padding-block: 1.1rem; flex-wrap: wrap;
+      }
+      .brand {
+        font-weight: 700; font-size: 1.05rem; letter-spacing: -0.015em;
+        color: var(--ink); text-decoration: none; margin-right: auto;
+      }
+      .brand span { color: var(--accent); }
+      .site-header nav { display: flex; gap: 1.25rem; }
+      .site-header nav a {
+        color: var(--ink-soft); text-decoration: none; font-size: 0.94rem;
+      }
+      .site-header nav a:hover,
+      .site-header nav a[aria-current="page"] { color: var(--ink); }
+
+      /* ---- typography ---- */
+      main { padding-block: 3rem 4.5rem; }
+
+      h1 {
+        font-size: clamp(1.85rem, 1.5rem + 1.6vw, 2.55rem);
+        line-height: 1.14; letter-spacing: -0.024em;
+        margin: 0 0 0.75rem; text-wrap: balance;
+      }
+      h2 {
+        font-size: clamp(1.3rem, 1.18rem + 0.5vw, 1.5rem);
+        line-height: 1.25; letter-spacing: -0.015em;
+        margin: 3rem 0 0.85rem; text-wrap: balance;
+      }
+      h3 {
+        font-size: 1.12rem; line-height: 1.35; letter-spacing: -0.008em;
+        margin: 2.25rem 0 0.6rem; text-wrap: balance;
+      }
+      p, ul, ol { margin: 0 0 1.15rem; }
+      ul, ol { padding-left: 1.3rem; }
+      li { margin-bottom: 0.4rem; }
+      li::marker { color: var(--ink-faint); }
+      strong { font-weight: 650; }
+
+      a { color: var(--accent); text-underline-offset: 0.18em; }
+
+      .lede {
+        font-size: 1.14em; line-height: 1.55; color: var(--ink-soft);
+        margin-bottom: 2rem;
+      }
+
+      hr { border: 0; border-top: 1px solid var(--line); margin: 3rem 0; }
+
+      blockquote {
+        margin: 1.6rem 0; padding: 0.2rem 0 0.2rem 1.15rem;
+        border-left: 3px solid var(--accent);
+        color: var(--ink-soft); font-style: normal;
+      }
+      blockquote p:last-child { margin-bottom: 0; }
+
+      /* ---- tables: conteudo principal, precisam ler bem ----
+         Tabela de Markdown nao vem com wrapper, entao a propria table
+         vira o container de scroll. Sem isso, estoura no celular. */
+      table {
+        border-collapse: collapse;
+        display: block; overflow-x: auto;
+        width: max-content; min-width: 100%; max-width: 100%;
+        margin: 1.6rem 0;
+        font-size: 0.93rem; line-height: 1.5;
+      }
+      th, td {
+        text-align: left; padding: 0.6rem 0.8rem;
+        border-bottom: 1px solid var(--line-soft);
+        vertical-align: top;
+      }
+      th {
+        font-weight: 640; font-size: 0.82rem;
+        text-transform: uppercase; letter-spacing: 0.045em;
+        color: var(--ink-faint);
+        border-bottom: 1px solid var(--line);
+        white-space: nowrap;
+      }
+      tbody tr:last-child td { border-bottom: 0; }
+      td:first-child { font-weight: 560; }
+
+      /* ---- code ---- */
+      code {
+        font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+        font-size: 0.88em; background: var(--bg-raised);
+        padding: 0.12em 0.35em; border-radius: 3px;
+      }
+      pre {
+        background: var(--bg-raised); border: 1px solid var(--line-soft);
+        border-radius: 6px; padding: 1rem; overflow-x: auto;
+        font-size: 0.87rem; line-height: 1.55; margin: 1.6rem 0;
+      }
+      pre code { background: none; padding: 0; font-size: inherit; }
+
+      /* ---- article meta ---- */
+      .article-meta {
+        display: flex; flex-wrap: wrap; gap: 0.5rem 1rem;
+        font-size: 0.87rem; color: var(--ink-faint);
+        margin-bottom: 2rem;
+      }
+      .article-meta time { font-variant-numeric: tabular-nums; }
+
+      /* ---- disclosure ---- */
       .disclosure {
-        border:1px solid var(--line); border-left:3px solid var(--accent);
-        padding:.85rem 1rem; margin:0 0 2rem; font-size:.92rem; color:var(--muted);
+        background: var(--accent-bg);
+        border-left: 3px solid var(--accent);
+        border-radius: 0 5px 5px 0;
+        padding: 0.85rem 1.05rem;
+        margin: 0 0 2.5rem;
+        font-size: 0.9rem; line-height: 1.55;
+        color: var(--ink-soft);
       }
-      article :is(table) { width:100%; border-collapse:collapse; }
-      article :is(td,th) { border:1px solid var(--line); padding:.5rem; text-align:left; }
-      article pre { overflow-x:auto; padding:1rem; border:1px solid var(--line); }
+
+      /* ---- author box: sinal de E-E-A-T ---- */
+      .author {
+        display: flex; gap: 1rem; align-items: flex-start;
+        border: 1px solid var(--line); border-radius: 8px;
+        padding: 1.15rem; margin-top: 3.5rem;
+        background: var(--bg-raised);
+      }
+      .author-avatar {
+        flex: 0 0 44px; height: 44px; border-radius: 50%;
+        background: var(--accent); color: #fff;
+        display: grid; place-items: center;
+        font-weight: 650; font-size: 0.95rem; letter-spacing: -0.02em;
+      }
+      .author-body { font-size: 0.91rem; line-height: 1.6; color: var(--ink-soft); }
+      .author-body strong { color: var(--ink); display: block; margin-bottom: 0.15rem; }
+      .author-body p { margin: 0; }
+
+      /* ---- article list ---- */
+      .post-list { list-style: none; padding: 0; margin: 0; }
+      .post-list li { border-top: 1px solid var(--line-soft); margin: 0; }
+      .post-list li:first-child { border-top: 0; }
+      .post-list a.post-link {
+        display: block; padding: 1.35rem 0; text-decoration: none; color: inherit;
+      }
+      .post-list a.post-link:hover .post-title { color: var(--accent); }
+      .post-title {
+        font-size: 1.14rem; font-weight: 640; line-height: 1.32;
+        letter-spacing: -0.012em; margin-bottom: 0.3rem;
+        text-wrap: balance;
+      }
+      .post-desc { color: var(--ink-soft); font-size: 0.94rem; line-height: 1.55; }
+      .post-date {
+        color: var(--ink-faint); font-size: 0.82rem; margin-top: 0.45rem;
+        font-variant-numeric: tabular-nums;
+      }
+
+      /* ---- next article ---- */
+      .next-up {
+        margin-top: 2.5rem; padding-top: 1.5rem;
+        border-top: 1px solid var(--line);
+      }
+      .next-up .label {
+        font-size: 0.78rem; text-transform: uppercase; letter-spacing: 0.06em;
+        color: var(--ink-faint); margin-bottom: 0.35rem;
+      }
+      .next-up a { font-weight: 600; text-decoration: none; }
+      .next-up a:hover { text-decoration: underline; }
+
+      /* ---- footer ---- */
+      .site-footer {
+        border-top: 1px solid var(--line);
+        padding-block: 2rem 2.5rem;
+        color: var(--ink-faint); font-size: 0.87rem;
+      }
+      .site-footer nav { display: flex; gap: 1.15rem; flex-wrap: wrap; margin-bottom: 0.8rem; }
+      .site-footer a { color: var(--ink-soft); text-decoration: none; }
+      .site-footer a:hover { color: var(--ink); text-decoration: underline; }
+      .site-footer p { margin: 0; }
     </style>
   </head>
   <body>
-    <header>
+    <header class="site-header">
       <div class="wrap">
+        <a class="brand" href="/">Ops<span>Primer</span></a>
         <nav>
-          <a class="brand" href="/">OpsPrimer</a>
-          <a href="/articles/">Articles</a>
-          <a href="/about/">About</a>
+          <a href="/articles/" aria-current={path.startsWith('/articles') ? 'page' : undefined}>Articles</a>
+          <a href="/about/" aria-current={path.startsWith('/about') ? 'page' : undefined}>About</a>
         </nav>
       </div>
     </header>
+
     <main class="wrap"><slot /></main>
-    <footer>
+
+    <footer class="site-footer">
       <div class="wrap">
         <nav>
+          <a href="/articles/">Articles</a>
+          <a href="/about/">About</a>
           <a href="/affiliate-disclosure/">Affiliate disclosure</a>
           <a href="/privacy-policy/">Privacy</a>
-          <a href="/about/">About</a>
         </nav>
-        <p>© {new Date().getFullYear()} OpsPrimer</p>
+        <p>© {new Date().getFullYear()} OpsPrimer — written by Michel Modesto</p>
       </div>
     </footer>
   </body>
