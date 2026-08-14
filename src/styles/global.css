@@ -46,6 +46,7 @@
   --mono: 'Plex Mono', ui-monospace, SFMono-Regular, Menlo, monospace;
 
   --measure: 34rem;   /* ~66 caracteres em Public Sans a 18px */
+  --shell: 46rem;     /* largura do site: header, main e footer alinhados */
   --gutter: 1.5rem;
 }
 
@@ -82,8 +83,14 @@ body {
 }
 @media (max-width: 30rem) { body { font-size: 17px; } }
 
-.wrap { max-width: var(--measure); margin-inline: auto; padding-inline: var(--gutter); }
-.wrap-wide { max-width: 52rem; margin-inline: auto; padding-inline: var(--gutter); }
+.wrap, .wrap-wide {
+  max-width: var(--shell); margin-inline: auto; padding-inline: var(--gutter);
+}
+
+/* Prosa na medida de leitura; tabela, card, grade e quiz usam o shell inteiro. */
+main :where(p, ul, ol, h1, h2, h3, blockquote, dl, .lede, .article-meta, .toc, .group-note) {
+  max-width: var(--measure);
+}
 
 /* skip link */
 .skip {
@@ -183,8 +190,8 @@ main { padding-block: 3.2rem 5rem; }
 .dotgrid { margin: 0 0 3rem; }
 
 .dotgrid-figure {
-  display: flex; align-items: flex-start; gap: clamp(1rem, 3vw, 2.2rem);
-  margin-bottom: 1.4rem;
+  display: flex; align-items: start; gap: clamp(1rem, 3vw, 2.4rem);
+  margin-bottom: 1.5rem;
 }
 
 .tally {
@@ -200,10 +207,10 @@ main { padding-block: 3.2rem 5rem; }
 
 .dotgrid-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(8px, 1fr));
+  grid-template-columns: repeat(21, 1fr);
   gap: 5px;
-  flex: 1 1 auto; min-width: 0;
-  padding-top: 0.5rem;
+  flex: 0 1 21rem; min-width: 0;
+  align-self: start;
 }
 .dotgrid-grid i {
   display: block; aspect-ratio: 1; border-radius: 50%;
@@ -226,10 +233,13 @@ main { padding-block: 3.2rem 5rem; }
 }
 .dotgrid-caption b { color: var(--ink); font-weight: 600; }
 
-@media (max-width: 34rem) {
-  .dotgrid-figure { flex-direction: column; gap: 0.9rem; }
-  .tally { font-size: clamp(5rem, 24vw, 8rem); }
-  .dotgrid-grid { width: 100%; padding-top: 0; }
+@media (max-width: 44rem) {
+  .dotgrid-grid { grid-template-columns: repeat(16, 1fr); flex-basis: 15rem; }
+}
+@media (max-width: 32rem) {
+  .dotgrid-figure { flex-direction: column; gap: 1rem; }
+  .tally { font-size: clamp(4.5rem, 22vw, 7rem); }
+  .dotgrid-grid { grid-template-columns: repeat(21, 1fr); flex-basis: auto; width: 100%; }
 }
 
 /* ---------- selo de procedencia (Evidence) ---------- */
