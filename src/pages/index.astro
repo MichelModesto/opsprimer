@@ -1,26 +1,22 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import DotGrid from '../components/DotGrid.astro';
+import { GROUPS } from '../data/groups';
 import { getCollection } from 'astro:content';
 
-const articles = (await getCollection('articles', ({ data }) => !data.draft))
+const all = (await getCollection('articles', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const fmt = (d) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 const mins = (a) => Math.max(1, Math.round((a.body?.split(/\s+/).length ?? 0) / 220));
+const inGroup = (g) => all.filter((a) => a.data.group === g);
+const ungrouped = all.filter((a) => !a.data.group);
 
 const jsonLd = {
-  '@context': 'https://schema.org',
-  '@type': 'WebSite',
-  name: 'OpsPrimer',
-  url: 'https://opsprimer.com',
+  '@context': 'https://schema.org', '@type': 'WebSite',
+  name: 'OpsPrimer', url: 'https://opsprimer.com',
   description: 'Practical guides on CRMs, automation and operations for marketing agencies.',
-  author: {
-    '@type': 'Person',
-    name: 'Michel Modesto',
-    jobTitle: 'Fullstack developer',
-    url: 'https://opsprimer.com/about/',
-  },
+  author: { '@type': 'Person', name: 'Michel Modesto', jobTitle: 'Fullstack developer', url: 'https://opsprimer.com/about/' },
 };
 ---
 <BaseLayout
@@ -32,25 +28,50 @@ const jsonLd = {
 
   <h1>CRM advice from the person who has to make it work</h1>
   <p class="lede">
-    Most writing about these tools comes from people who evaluate them. I'm
-    usually the one wiring them into a billing system and finding out what breaks
-    six months in. Every article here starts from an account I set up myself —
-    and where I haven't tested something, I say so.
+    Most writing about these tools comes from people who evaluate them. I'm usually the
+    one wiring them into a billing system and finding out what breaks six months in.
+    Every article starts from an account I set up myself — and where I haven't tested
+    something, it says so on the page.
   </p>
 
-  <h2 class="section-label" id="articles">Articles</h2>
-  <ul class="post-list">
-    {articles.map((a) => (
-      <li>
-        <a class="post-link" href={`/articles/${a.id}/`}>
-          <div class="post-title">{a.data.title}</div>
-          <div class="post-desc">{a.data.description}</div>
-          <div class="post-meta">
-            <span>{fmt(a.data.pubDate)}</span>
-            <span>{mins(a)} min</span>
-          </div>
-        </a>
-      </li>
-    ))}
-  </ul>
+  <p class="ff-entry">
+    <a class="toolcard-cta" href="/fit-finder/">Find which CRM fits you — 5 questions →</a>
+  </p>
+
+  {GROUPS.map((g) => {
+    const posts = inGroup(g.id);
+    return posts.length ? (
+      <section class="group">
+        <h2 class="group-head" id={g.id}>{g.title}</h2>
+        <p class="group-note">{g.note}</p>
+        <ul class="post-list">
+          {posts.map((a) => (
+            <li>
+              <a class="post-link" href={`/articles/${a.id}/`}>
+                <div class="post-title">{a.data.title}</div>
+                <div class="post-desc">{a.data.description}</div>
+                <div class="post-meta"><span>{fmt(a.data.pubDate)}</span><span>{mins(a)} min</span></div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ) : null;
+  })}
+
+  {ungrouped.length > 0 && (
+    <section class="group">
+      <h2 class="group-head">More</h2>
+      <ul class="post-list">
+        {ungrouped.map((a) => (
+          <li>
+            <a class="post-link" href={`/articles/${a.id}/`}>
+              <div class="post-title">{a.data.title}</div>
+              <div class="post-desc">{a.data.description}</div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
 </BaseLayout>

@@ -1,35 +1,58 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
+import { GROUPS } from '../../data/groups';
 import { getCollection } from 'astro:content';
 
-const articles = (await getCollection('articles', ({ data }) => !data.draft))
+const all = (await getCollection('articles', ({ data }) => !data.draft))
   .sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf());
 
 const fmt = (d) => d.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
 const mins = (a) => Math.max(1, Math.round((a.body?.split(/\s+/).length ?? 0) / 220));
+const inGroup = (g) => all.filter((a) => a.data.group === g);
+const ungrouped = all.filter((a) => !a.data.group);
+
 ---
 <BaseLayout
   title="Articles — OpsPrimer"
-  description="Every article on OpsPrimer: CRMs, automation and operations for marketing agencies."
+  description="Every article on OpsPrimer, grouped by what you are trying to decide."
 >
   <h1>Articles</h1>
-  <p class="lede">
-    Written from tools I've set up and run myself. Where a claim comes from
-    documentation instead of use, it says so on the page.
-  </p>
+  <p class="lede">Grouped by what you are trying to decide. Written from tools I have set up and run myself.</p>
 
-  <ul class="post-list">
-    {articles.map((a) => (
-      <li>
-        <a class="post-link" href={`/articles/${a.id}/`}>
-          <div class="post-title">{a.data.title}</div>
-          <div class="post-desc">{a.data.description}</div>
-          <div class="post-meta">
-            <span>{fmt(a.data.pubDate)}</span>
-            <span>{mins(a)} min</span>
-          </div>
-        </a>
-      </li>
-    ))}
-  </ul>
+  {GROUPS.map((g) => {
+    const posts = inGroup(g.id);
+    return posts.length ? (
+      <section class="group">
+        <h2 class="group-head" id={g.id}>{g.title}</h2>
+        <p class="group-note">{g.note}</p>
+        <ul class="post-list">
+          {posts.map((a) => (
+            <li>
+              <a class="post-link" href={`/articles/${a.id}/`}>
+                <div class="post-title">{a.data.title}</div>
+                <div class="post-desc">{a.data.description}</div>
+                <div class="post-meta"><span>{fmt(a.data.pubDate)}</span><span>{mins(a)} min</span></div>
+              </a>
+            </li>
+          ))}
+        </ul>
+      </section>
+    ) : null;
+  })}
+
+  {ungrouped.length > 0 && (
+    <section class="group">
+      <h2 class="group-head">More</h2>
+      <ul class="post-list">
+        {ungrouped.map((a) => (
+          <li>
+            <a class="post-link" href={`/articles/${a.id}/`}>
+              <div class="post-title">{a.data.title}</div>
+              <div class="post-desc">{a.data.description}</div>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  )}
 </BaseLayout>

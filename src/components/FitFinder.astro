@@ -1,0 +1,133 @@
+---
+import ToolCard from './ToolCard.astro';
+
+// Ferramenta de decisao. Vanilla JS, sem framework, sem coleta.
+// Sem JS: a tabela de decisao abaixo responde a mesma pergunta.
+interface Props { heading?: string; }
+const { heading = 'Which one fits you?' } = Astro.props;
+
+const Q = [
+  { id: 'seats', legend: 'How many people need a login?',
+    opts: [['1','Just me'],['2','2'],['3','3 or more']] },
+  { id: 'pipes', legend: 'How many separate pipelines do you need?',
+    opts: [['1','One'],['2','Two or more']] },
+  { id: 'email', legend: 'Is email the core of the work, or support?',
+    opts: [['support','Support'],['core','The core']] },
+  { id: 'client', legend: 'Do clients see your forms and landing pages?',
+    opts: [['0','No'],['1','Yes']] },
+  { id: 'deals', legend: 'Roughly how many active deals?',
+    opts: [['few','Under 10'],['some','10–50'],['many','50+']] },
+];
+---
+<section class="ff" id="fit-finder">
+  <h2>{heading}</h2>
+  <p class="lede">Five questions. Nothing is collected, and there's no email step.</p>
+
+  <form id="ff-form">
+    {Q.map((q) => (
+      <fieldset>
+        <legend>{q.legend}</legend>
+        <div class="ff-opts">
+          {q.opts.map(([v, label], i) => (
+            <label>
+              <input type="radio" name={q.id} value={v} checked={i === 0} />
+              <span>{label}</span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
+    ))}
+  </form>
+
+  <output class="ff-out" id="ff-out" aria-live="polite" for="ff-form"></output>
+
+  <p class="ff-share" id="ff-share" hidden>
+    <a id="ff-link" href="#fit-finder">Link to this result</a> — send it to whoever
+    else has to agree.
+  </p>
+
+  <div class="ff-fallback">
+    <table>
+      <thead><tr><th>If this is you</th><th>Start with</th></tr></thead>
+      <tbody>
+        <tr><td>Clients see your forms or emails</td><td>A paid tier — free-plan branding can't be removed</td></tr>
+        <tr><td>Email sequences are the core</td><td>ActiveCampaign</td></tr>
+        <tr><td>You need 2+ pipelines, or 3+ people</td><td>A paid tier of either</td></tr>
+        <tr><td>One person, under 10 active deals</td><td>Streak or OnePageCRM — I earn nothing from these</td></tr>
+        <tr><td>Anything else</td><td>HubSpot free</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div id="ff-card" hidden>
+    <div data-tool="hubspot"><ToolCard id="hubspot" /></div>
+    <div data-tool="activecampaign"><ToolCard id="activecampaign" /></div>
+    <div data-tool="streak"><ToolCard id="streak" /></div>
+    <div data-tool="onepagecrm"><ToolCard id="onepagecrm" /></div>
+  </div>
+</section>
+
+<script>
+  document.documentElement.classList.add('js');
+
+  const form = document.getElementById('ff-form') as HTMLFormElement | null;
+  const out = document.getElementById('ff-out');
+  const cards = document.getElementById('ff-card');
+  const share = document.getElementById('ff-share');
+  const link = document.getElementById('ff-link') as HTMLAnchorElement | null;
+  if (form && out && cards && share && link) {
+    // Ordem importa: a primeira regra que casar decide.
+    const RULES = [
+      { if: (v: any) => v.client === '1', tool: 'hubspot', paid: true,
+        why: 'Free-plan branding appears on every form and email and cannot be removed. Anything client-facing decides this before any other limit does — you are shopping for a paid tier.',
+        sec: '/articles/hubspot-free-plan-limits/#which-one-stops-you-first' },
+      { if: (v: any) => v.email === 'core', tool: 'activecampaign', paid: false,
+        why: 'If sequences are the point, you want a tool built automation-first. HubSpot free allows one automated action; workflows are a Professional feature.',
+        sec: '/articles/marketing-automation-for-agencies/' },
+      { if: (v: any) => v.pipes === '2' || v.seats === '3', tool: 'hubspot', paid: true,
+        why: 'The free plan gives one pipeline and two users. You have already passed a structural limit, so price the tier that fits rather than the entry one.',
+        sec: '/articles/hubspot-free-plan-limits/#which-one-stops-you-first' },
+      { if: (v: any) => v.deals === 'few' && v.seats === '1', tool: 'streak', paid: false,
+        why: 'One person with a small pipeline usually loses time to a full CRM rather than saving it. Something that lives in your inbox costs less and asks less.',
+        sec: '/articles/crm-for-consultants/' },
+      { if: () => true, tool: 'hubspot', paid: false,
+        why: 'A real CRM database at no cost, with room to grow. Know where the walls are before you rely on it.',
+        sec: '/articles/crm-for-marketing-agencies/' },
+    ];
+
+    const read = () => Object.fromEntries(new FormData(form) as any);
+
+    function render(push: boolean) {
+      const v = read();
+      const r = RULES.find((x) => x.if(v))!;
+
+      out.innerHTML =
+        '<div class="ff-verdict">Start with ' + r.tool.replace('onepagecrm', 'OnePageCRM')
+          .replace('activecampaign', 'ActiveCampaign').replace('hubspot', 'HubSpot')
+          .replace('streak', 'Streak or OnePageCRM')
+        + (r.paid ? ' — a paid tier' : '') + '</div>'
+        + '<p>' + r.why + ' <a href="' + r.sec + '">Read why</a>.</p>';
+
+      cards.hidden = false;
+      cards.querySelectorAll<HTMLElement>('[data-tool]').forEach((el) => {
+        el.hidden = el.dataset.tool !== r.tool;
+      });
+
+      const qs = new URLSearchParams(v as any).toString();
+      link.href = location.pathname + '?' + qs + '#fit-finder';
+      share.hidden = false;
+      if (push) history.replaceState(null, '', link.href);
+    }
+
+    // Estado vindo da URL — o resultado e compartilhavel.
+    const p = new URLSearchParams(location.search);
+    let fromUrl = false;
+    p.forEach((val, k) => {
+      const el = form.querySelector<HTMLInputElement>(`input[name="${k}"][value="${val}"]`);
+      if (el) { el.checked = true; fromUrl = true; }
+    });
+
+    form.addEventListener('change', () => render(true));
+    if (fromUrl) render(false);
+  }
+</script>

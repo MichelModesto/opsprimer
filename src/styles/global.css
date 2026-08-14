@@ -351,19 +351,6 @@ td strong { font-family: var(--mono); font-weight: 500; color: var(--signal); }
 }
 .next-up a:hover { text-decoration: underline; }
 
-/* ---------- link de afiliado ---------- */
-.aff {
-  font-weight: 600;
-  background-image: linear-gradient(var(--link), var(--link));
-  background-size: 100% 1px; background-position: 0 100%;
-  background-repeat: no-repeat; text-decoration: none;
-}
-.aff::after {
-  content: '↗'; font-size: 0.78em; margin-left: 0.22em;
-  vertical-align: 0.08em; color: var(--ink-2);
-}
-.aff:hover { background-size: 100% 2px; }
-
 /* ---------- quiz ---------- */
 .quiz { background: var(--raised); border-radius: 5px; margin: 2.8rem 0; }
 .quiz-head { padding: 1rem 1.1rem 0.2rem; }
@@ -420,3 +407,100 @@ td strong { font-family: var(--mono); font-weight: 500; color: var(--signal); }
   a[href^='http']::after { content: ' (' attr(href) ')'; font-size: 9pt; color: #555; }
   .dotgrid-grid { max-width: 12rem; }
 }
+
+/* ---------- ToolCard: forma unica, o leitor aprende a reconhecer ---------- */
+.toolcard {
+  background: var(--raised); border-radius: 6px;
+  padding: 1.15rem 1.2rem; margin: 2rem 0;
+}
+.toolcard-head {
+  display: flex; align-items: baseline; justify-content: space-between;
+  gap: 0.8rem; flex-wrap: wrap; margin-bottom: 0.2rem;
+}
+.toolcard-name {
+  font-family: var(--display); font-weight: 600; font-size: 1.16rem;
+  letter-spacing: -0.02em;
+}
+.badge {
+  font-family: var(--mono); font-size: 0.66rem; letter-spacing: 0.05em;
+  text-transform: uppercase; padding: 0.2rem 0.45rem; border-radius: 2px;
+  white-space: nowrap;
+}
+.badge-aff  { background: var(--signal); color: #fff; }
+.badge-free { border: 1px solid var(--ink-2); color: var(--ink-2); }
+
+.toolcard-shape { color: var(--ink-2); font-size: 0.92rem; margin: 0 0 0.9rem; }
+
+.toolcard-fit { margin: 0 0 1.1rem; font-size: 0.92rem; }
+.toolcard-fit dt {
+  font-family: var(--mono); font-size: 0.68rem; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--ink-2); margin-top: 0.55rem;
+}
+.toolcard-fit dt:first-child { margin-top: 0; }
+.toolcard-fit dd { margin: 0.1rem 0 0; line-height: 1.45; }
+
+.toolcard-cta {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-height: 44px; padding: 0.6rem 1.1rem;
+  background: var(--link); color: #fff; text-decoration: none;
+  border-radius: 4px; font-weight: 600; font-size: 0.95rem;
+}
+.toolcard-cta:hover { filter: brightness(1.1); }
+.toolcard-source { margin: 0.8rem 0 0; }
+
+@media (max-width: 30rem) {
+  .toolcard-cta { display: flex; width: 100%; }
+}
+
+/* ---------- Fit Finder ---------- */
+.ff { background: var(--raised); border-radius: 6px; padding: 1.2rem; margin: 2.4rem 0; }
+.ff h2, .ff h3 { margin-top: 0; }
+.ff fieldset { border: 0; padding: 0; margin: 0 0 1.15rem; }
+.ff legend { font-size: 0.94rem; font-weight: 600; padding: 0; margin-bottom: 0.45rem; }
+.ff-opts { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+.ff-opts label {
+  font-family: var(--mono); font-size: 0.78rem;
+  border: 1px solid var(--rule); border-radius: 3px; background: var(--paper);
+  padding: 0.55rem 0.75rem; cursor: pointer; min-height: 44px;
+  display: inline-flex; align-items: center;
+}
+.ff-opts input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.ff-opts label:has(input:checked) { background: var(--ink); border-color: var(--ink); color: var(--paper); }
+.ff-opts label:has(input:focus-visible) { outline: 2px solid var(--signal); outline-offset: 2px; }
+.ff-out { margin-top: 0.4rem; }
+.ff-verdict {
+  font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--signal); margin-bottom: 0.35rem;
+}
+.ff-share {
+  font-size: 0.85rem; color: var(--ink-2); margin-top: 1rem;
+  padding-top: 0.9rem; border-top: 1px solid var(--rule);
+}
+.js .ff-fallback { display: none; }
+
+/* ---------- numero-manchete do artigo ---------- */
+.hero-figure { display: flex; align-items: baseline; gap: 0.7rem; margin: 0 0 1.4rem; }
+.hero-figure b {
+  font-family: var(--display); font-weight: 600;
+  font-size: clamp(3.2rem, 9vw, 5rem); line-height: 0.82;
+  letter-spacing: -0.045em; font-variant-numeric: tabular-nums;
+  color: var(--signal);
+}
+.hero-figure span {
+  font-family: var(--mono); font-size: 0.72rem; letter-spacing: 0.05em;
+  text-transform: uppercase; color: var(--ink-2); max-width: 9rem; line-height: 1.35;
+}
+
+/* ---------- grupos temáticos ---------- */
+.group + .group { margin-top: 3.4rem; }
+.group-head {
+  font-family: var(--mono); font-size: 0.7rem; letter-spacing: 0.09em;
+  text-transform: uppercase; color: var(--ink-2); margin: 0 0 0.2rem;
+}
+.group-note { font-size: 0.9rem; color: var(--ink-2); margin: 0 0 0.6rem; }
+
+@media print { .toolcard-cta { border: 1px solid #000; color: #000; background: none; } .ff { display: none; } }
+
+.ff-entry { margin: 0 0 1rem; }
+.ff-entry .toolcard-cta { font-size: 1rem; }
+@media (max-width: 30rem) { .ff-entry .toolcard-cta { width: 100%; } }

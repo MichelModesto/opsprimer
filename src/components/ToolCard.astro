@@ -1,0 +1,41 @@
+---
+import { TOOLS, type ToolId } from '../data/tools';
+
+interface Props { id: ToolId; }
+const { id } = Astro.props;
+const t = TOOLS[id];
+
+// Politica editorial virando restricao tecnica: sem fraqueza declarada,
+// o card nao existe. Nao ha como publicar uma recomendacao sem contraponto.
+if (!t?.skip) {
+  throw new Error(`ToolCard "${id}": campo "skip" obrigatorio. Sem fraqueza declarada, sem card.`);
+}
+
+const isAff = t.earns === 'affiliate';
+const rel = isAff ? 'sponsored nofollow noopener' : 'noopener';
+---
+<aside class="toolcard">
+  <div class="toolcard-head">
+    <span class="toolcard-name">{t.name}</span>
+    <span class={`badge ${isAff ? 'badge-aff' : 'badge-free'}`}>
+      {isAff ? 'Affiliate link' : 'I earn nothing from this'}
+    </span>
+  </div>
+
+  <p class="toolcard-shape">{t.shape}</p>
+
+  <dl class="toolcard-fit">
+    <dt>Good fit if</dt><dd>{t.fit}</dd>
+    <dt>Skip it if</dt><dd>{t.skip}</dd>
+  </dl>
+
+  <a class="toolcard-cta" href={t.url} rel={rel} target="_blank">
+    {t.cta}<span aria-hidden="true"> →</span>
+  </a>
+
+  <p class="toolcard-source">
+    <span class={`evidence ${t.tested ? '' : 'docs'}`}>
+      {t.tested ? 'Tested on a live account' : 'From official docs'}
+    </span>
+  </p>
+</aside>

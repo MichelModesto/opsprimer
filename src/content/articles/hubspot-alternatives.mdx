@@ -3,7 +3,13 @@ title: "HubSpot alternatives: what you're actually trying to escape"
 description: "People look for alternatives for four different reasons, and each one points somewhere else. Here's how to tell which one you have before you migrate anything."
 pubDate: 2026-08-14
 draft: false
+tools: ["activecampaign", "streak", "onepagecrm"]
+group: choosing
+hero: { figure: "4", label: "reasons people look" }
 ---
+
+import ToolCard from '../../components/ToolCard.astro';
+import FitFinder from '../../components/FitFinder.astro';
 
 {/*
   ARTIGO 6 — alvo: "hubspot alternatives" (autocomplete denso: free, reddit,
@@ -42,10 +48,6 @@ amount to relearn a tool.
 
 This is a real reason to look elsewhere, and it's not a preference — it's a hard limit.
 
-<div class="evidence-row">
-  <span class="evidence">Tested on a live account</span>
-</div>
-
 HubSpot's free plan allows **one automated action** and **one automated email per
 form**. That's the whole automation surface. Workflows are a Professional feature.
 
@@ -54,6 +56,8 @@ alternative — you're looking for a tool built the other way round, with automa
 first and a CRM attached. **ActiveCampaign** is the obvious one. Two things to check
 before you commit: there's no free tier, only a trial, and deal pipelines aren't
 included in its entry tier either.
+
+<ToolCard id="activecampaign" />
 
 ### 3. It's too heavy for the size you are
 
@@ -69,6 +73,10 @@ the fix isn't a cheaper CRM. It's a smaller one. Tools that live inside your inb
 **Streak**, **OnePageCRM** — solve this by not being a place you have to visit. I earn
 nothing from either; I'm naming them because for this specific reason they're the right
 answer.
+
+<ToolCard id="streak" />
+
+<ToolCard id="onepagecrm" />
 
 ### 4. Branding, or a wall you've already hit
 
@@ -94,6 +102,9 @@ Here's what actually differs, stripped of feature lists:
 
 Everything else is a matter of which shape fits the job. There is no tool on this list
 that is better at everything, and any article telling you otherwise is selling one.
+
+
+<FitFinder heading="Not sure which applies to you?" />
 
 ## What I'd do before migrating anything
 

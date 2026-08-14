@@ -1,0 +1,45 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import FitFinder from '../components/FitFinder.astro';
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'WebApplication',
+  name: 'CRM Fit Finder',
+  applicationCategory: 'BusinessApplication',
+  url: 'https://opsprimer.com/fit-finder/',
+  offers: { '@type': 'Offer', price: '0', priceCurrency: 'USD' },
+  author: { '@type': 'Person', name: 'Michel Modesto', url: 'https://opsprimer.com/about/' },
+};
+---
+<BaseLayout
+  title="CRM Fit Finder — which CRM actually fits how you work"
+  description="Five questions, a named recommendation with its weakness stated, and a link you can share. No email, no data collected."
+  jsonLd={jsonLd}
+>
+  <div class="hero-figure">
+    <b>5</b><span>questions, no email step</span>
+  </div>
+
+  <h1>Which CRM actually fits how you work</h1>
+  <p class="lede">
+    Most comparison pages answer "which is best". That question has no answer. This one
+    answers "which fits the shape you're in" — and when the honest answer is a tool I
+    earn nothing from, that's what it says.
+  </p>
+
+  <FitFinder heading="Answer five questions" />
+
+  <h2>How this decides</h2>
+  <p>
+    In order: anything client-facing outranks everything else, because free-tier
+    branding can't be removed. Then whether email is the core of the work. Then the
+    structural limits — one pipeline, two users. Then size: a one-person operation with
+    a small pipeline usually loses time to a full CRM rather than saving it.
+  </p>
+  <p>
+    Every number behind those rules comes from
+    <a href="/articles/hubspot-free-plan-limits/">HubSpot's official product catalog</a>,
+    checked against an account I set up and ran.
+  </p>
+</BaseLayout>
