@@ -19,6 +19,9 @@ const canonical = new URL(Astro.url.pathname, Astro.site);
     <meta property="og:type" content="website" />
     <meta property="og:url" content={canonical} />
     <link rel="sitemap" href="/sitemap-index.xml" />
+    {/* Verificacao de propriedade da rede de afiliados Impact.
+        Publica por natureza — nao e segredo. */}
+    <meta name="impact-site-verification" value="0963f78d-2a58-41d7-b254-7ced3a9457a4" />
     <style>
       :root { --fg:#1a1a1a; --muted:#666; --bg:#fff; --accent:#0b5fff; --line:#e5e5e5; }
       @media (prefers-color-scheme: dark) {
