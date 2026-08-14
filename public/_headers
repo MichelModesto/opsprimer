@@ -4,4 +4,12 @@
   X-Frame-Options: DENY
   Referrer-Policy: strict-origin-when-cross-origin
   Permissions-Policy: geolocation=(), microphone=(), camera=()
-  Content-Security-Policy: default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self' https://static.cloudflareinsights.com https://js.hs-scripts.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://forms.hubspot.com; upgrade-insecure-requests
+  Content-Security-Policy: default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self' https://static.cloudflareinsights.com https://js.hs-scripts.com; font-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'self' https://forms.hubspot.com; upgrade-insecure-requests
+
+# Fontes auto-hospedadas: nome fixo, conteudo imutavel na pratica.
+/fonts/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# Assets do Astro tem hash no nome — seguro cachear para sempre.
+/_astro/*
+  Cache-Control: public, max-age=31536000, immutable
