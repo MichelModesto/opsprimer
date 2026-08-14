@@ -1,0 +1,122 @@
+---
+title: "HubSpot forms: free on every plan, with three walls you find later"
+description: "Forms work on the free tier. Raw HTML markup, campaign association and conditional redirects don't — and each sits behind a different subscription."
+pubDate: 2026-08-14
+draft: false
+tools: ["hubspot"]
+group: making-it-work
+hero: { figure: "3", label: "form features behind a paid tier" }
+---
+
+import ToolCard from '../../components/ToolCard.astro';
+
+{/*
+  ARTIGO 9 — alvo: "hubspot forms" (sub-intencoes reais: api, builder, wordpress,
+  embed, conditional logic, captcha).
+
+  VERIFICADO em knowledge.hubspot.com/forms/create-forms (14/08/2026):
+  forms = "all products and plans". Mas: raw HTML forms = Marketing/Content Hub
+  Pro+; campaign association = Marketing Hub Pro+; conditional redirects =
+  Sales/Service Hub Enterprise. Catalogo: 1 e-mail automatico por formulario,
+  branding no free.
+
+  Angulo de dev — sem experiencia propria com o form ainda, entao procedencia
+  marcada como documentacao onde for o caso.
+*/}
+
+Forms are one of the few things HubSpot gives away without asterisks. Every plan,
+including free, can build and publish them.
+
+The asterisks are elsewhere, and they're the kind you meet after the form is already
+embedded on a client's site.
+
+## What you get on every plan
+
+A form builder, embedded forms for any site, standalone forms with a share link, and
+submissions landing straight in the CRM as contacts. Progressive fields and dependent
+fields — the ones that change what's asked based on previous answers — are documented
+without a tier restriction.
+
+For most small operations that's genuinely the whole job, and it costs nothing.
+
+## The three walls
+
+### 1. Raw HTML forms need Professional
+
+This is the one that catches developers.
+
+If you want to write the form markup yourself — your own classes, your own layout,
+your own validation, styled to match a site you built — that's a **Marketing Hub or
+Content Hub Professional** feature.
+
+On free and Starter you embed HubSpot's own markup and style around it. You can reach
+it with CSS, but you don't own the structure, and it isn't yours to change.
+
+For a developer this is the difference between a form that looks native and a form
+that looks embedded. It's usually discovered at the exact moment someone asks why the
+form doesn't match the rest of the page.
+
+### 2. Campaign association needs Marketing Hub Professional
+
+Attaching a form to a campaign — so submissions roll up into campaign reporting — is
+Professional and above.
+
+Practical consequence: on a lower tier you can collect submissions perfectly well, but
+attributing them to a specific campaign is manual. If reporting on which campaign
+produced which leads is the point of the exercise, that's the tier you're actually
+shopping for.
+
+### 3. Conditional redirects need Enterprise
+
+Sending different people to different destinations based on what they answered — a
+meeting scheduler for one answer, a page for another — requires **Sales or Service Hub
+Enterprise**.
+
+The lower-tier version is one thank-you destination for everyone, and branching handled
+after the fact.
+
+## And the two from the free tier itself
+
+Neither is about forms specifically, but both land on them.
+
+**One automated email per form.** Someone submits, they get exactly one automatic
+reply. A sequence isn't available — that's workflows, which are Professional and above.
+So a form on the free plan collects well and follows up once.
+
+**HubSpot branding, not removable.** It appears on free forms and landing pages, and
+there's no setting to turn it off. For an internal form, irrelevant. On a client-facing
+page with your name on it, this is usually the limit that decides the tier for you,
+regardless of the other three.
+
+## What I'd check before embedding one anywhere
+
+**Where the submission actually lands.** A form is a write path into your CRM, and
+every write path deserves the question: what happens when it fails? Test a submission
+with a broken field and see whether you're told, or whether it just doesn't appear.
+
+**What the embed loads.** An embedded form is third-party script on your page. If you
+run a Content Security Policy — and you should — the form's domain has to be allowed
+explicitly, or it silently won't render. That failure looks like an empty div, not an
+error.
+
+**Whether you need the form to be yours.** If the answer is yes, you're on Professional.
+Deciding that before you build the page is much cheaper than deciding it after.
+
+**The follow-up ceiling.** One automatic email is a real constraint on a lead capture
+form. Plan the second and third touch as a manual task, or plan the tier that automates
+it.
+
+<ToolCard id="hubspot" />
+
+## The pattern, again
+
+Forms are free. What isn't free is **control** — over the markup, over the reporting,
+over where people go next.
+
+That's the same shape as everything else in the free tier: the thing itself is
+generous, and the parts that make it yours are the parts you pay for. Knowing which
+of those three you actually need is the whole decision.
+
+Related: [every hard limit on the free plan](/articles/hubspot-free-plan-limits/)
+· [which tier workflows need](/articles/hubspot-workflows-tier/)
+· [what breaks when you wire systems together](/articles/crm-integration-what-breaks/)
