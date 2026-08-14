@@ -7,49 +7,77 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 >
   <h1>Privacy policy</h1>
 
-  <p><em>Last updated: [DATA]</em></p>
+  <p><em>Last updated: 14 August 2026</em></p>
 
-  <!-- Esta politica descreve a stack PADRAO do esqueleto:
-       Cloudflare Pages + Cloudflare Web Analytics, sem cookies.
-       SE VOCE ADICIONAR qualquer coisa (form do HubSpot, GA4, embed de video,
-       fonte externa), ATUALIZE ESTE TEXTO. Politica desatualizada e pior que
-       nenhuma. -->
+  {/* ⚠️ Esta politica descreve a stack ATUAL do site:
+      Cloudflare Pages + Cloudflare Web Analytics, sem cookies, sem formulario.
+
+      SE VOCE ADICIONAR qualquer coisa — formulario do HubSpot, GA4, embed de
+      video, fonte externa, chat — ATUALIZE ESTE TEXTO NO MESMO COMMIT.
+      Politica desatualizada e pior que politica nenhuma: vira declaracao falsa. */}
+
+  <p>
+    Short version: this site sets no cookies, runs no advertising, and does not
+    collect your email. What follows is the detail.
+  </p>
 
   <h2>Analytics</h2>
   <p>
-    This site uses Cloudflare Web Analytics. It does not use cookies, does not
-    store any identifier on your device, and does not track you across sites.
-    Aggregated, non-identifying data is used only to see which pages are read.
+    This site uses Cloudflare Web Analytics. It sets no cookies, stores no
+    identifier on your device, and does not track you across other sites.
+    Visitor counts are computed server-side from request data that is hashed and
+    discarded. I see which pages are read and roughly where readers come from —
+    nothing that identifies you personally.
   </p>
 
   <h2>Cookies</h2>
-  <p>This site sets no cookies of its own.</p>
-
-  <h2>Hosting and logs</h2>
   <p>
-    The site is hosted on Cloudflare Pages. Cloudflare processes standard request
-    data (such as IP address) transiently to serve and protect the site.
+    This site sets no cookies of its own. That's why you're not seeing a cookie
+    banner.
+  </p>
+
+  <h2>Hosting and server logs</h2>
+  <p>
+    The site is hosted on Cloudflare Pages. To serve and protect the site,
+    Cloudflare processes standard request data — including your IP address —
+    transiently. This is handled under Cloudflare's own privacy terms.
   </p>
 
   <h2>Affiliate links</h2>
   <p>
     Some outbound links are affiliate links. When you click one, the destination
-    company may set its own cookie to attribute the referral. That happens on
-    their site, under their privacy policy — not this one. See the
-    <a href="/affiliate-disclosure/">affiliate disclosure</a>.
+    company may set its own cookie in order to attribute the referral. That
+    happens on <em>their</em> site, under <em>their</em> privacy policy — not
+    this one. Nothing is set on your device before you click. See the
+    <a href="/affiliate-disclosure/">affiliate disclosure</a> for who those
+    companies are.
   </p>
 
   <h2>Email</h2>
-  <!-- Enquanto NAO houver formulario, mantenha este paragrafo. Ao adicionar o
-       form do HubSpot, substitua descrevendo: o que e coletado, para que, onde
-       e armazenado (HubSpot, EUA) e como cancelar. -->
+  {/* ⚠️ Enquanto NAO houver formulario, mantenha este paragrafo como esta.
+      Ao adicionar o form do HubSpot, substitua descrevendo: o que e coletado,
+      com que finalidade, onde fica armazenado (HubSpot, EUA) e como cancelar. */}
   <p>
-    This site does not currently collect email addresses or run a newsletter.
+    This site does not currently collect email addresses and does not run a
+    newsletter. If that changes, this page will be updated before the form goes
+    live.
   </p>
 
-  <h2>Your rights</h2>
+  <h2>Children</h2>
   <p>
-    You can contact me at [SEU E-MAIL DE NEGOCIO] with any question about data
-    on this site.
+    This site is aimed at people running businesses and is not directed at
+    children under 13.
+  </p>
+
+  <h2>Changes to this policy</h2>
+  <p>
+    If the site's stack changes, this page is updated and the date at the top
+    changes with it.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    Any question about data on this site:
+    <a href="mailto:michelthedev@gmail.com">michelthedev@gmail.com</a>
   </p>
 </BaseLayout>

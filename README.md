@@ -73,7 +73,7 @@ de ambiente do Cloudflare Pages, nunca em arquivo.**
 
 ```bash
 npm run check:secrets
-git ls-files | grep -iE "^\.env" && echo "⚠️ PARE" || echo "✅ ok"
+git ls-files | grep -iE "^\.env" | grep -v "^\.env\.example$" && echo "⚠️ PARE" || echo "✅ ok"
 git log --format='%ae' | sort -u        # confira: nenhum e-mail pessoal
 ```
 
